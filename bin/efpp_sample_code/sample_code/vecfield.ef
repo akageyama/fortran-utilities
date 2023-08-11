@@ -1,0 +1,75 @@
+!!>
+  sample for efpp, ver.__EFPPVER__
+!!<
+
+module vecfield_m
+  use const_base_m
+  implicit none
+
+  private
+  public :: VECFIELD__DVOL
+  public :: operator( .dot. ),  &
+            vecfield__init,  &
+            vecfield__is_zero__?
+
+  integer(SI) <const> :: VECFIELD__NX = 10
+  integer(SI) <const> :: VECFIELD__NY = 12
+  integer(SI) <const> :: VECFIELD__NZ = 14
+  real(DR) <const> :: VECFIELD__DX = 1.0_DR / VECFIELD__NX
+  real(DR) <const> :: VECFIELD__DY = 1.0_DR / VECFIELD__NY
+  real(DR) <const> :: VECFIELD__DZ = 1.0_DR / VECFIELD__NZ
+  real(DR) <const> :: VECFIELD__DVOL = VECFIELD__DX*VECFIELD__DY*VECFIELD__DZ
+
+  type, public :: vecfield__t
+    real(DR) :: x(VECFIELD__NX,VECFIELD__NY,VECFIELD__NZ)
+    real(DR) :: y(VECFIELD__NX,VECFIELD__NY,VECFIELD__NZ)
+    real(DR) :: z(VECFIELD__NX,VECFIELD__NY,VECFIELD__NZ)
+  end type vecfield__t
+
+  interface operator( .dot. )
+     module procedure operator_dot_product
+  end interface
+
+
+contains
+
+  function operator_dot_product(a,b)
+    type(vecfield__t) <in> :: a, b
+    real(DR), dimension(VECFIELD__NX,  &
+                        VECFIELD__NY,  &
+                        VECFIELD__NZ) :: operator_dot_product
+    operator_dot_product  = a.x*b.x
+    operator_dot_product += a.y*b.y
+    operator_dot_product += a.z*b.z
+
+  end function operator_dot_product
+
+
+  subroutine vecfield__init(a)
+    type(vecfield__t) <out> :: a
+
+!debugp ' hello. I am in a function named __FUNC__'
+!debugp '        which is in __MODULE__'
+!debugp '        this is at line number __LINE__'
+!debugp '        in short, i am in __MODFUNC__'
+
+    a.x(:,:,:) = 1.0_DR
+    a.y(:,:,:) = 0.0_DR
+    a.z(:,:,:) = 0.0_DR
+  end subroutine vecfield__init
+
+
+  function vecfield__is_zero__?(a) result(ans)
+    type(vecfield__t) <in> :: a
+    logical :: ans
+
+!debugp ' hello. I am in a function named __FUNC__'
+!debugp '        which is in __MODULE__'
+!debugp '        this is at line number __LINE__'
+!debugp '        in short, i am in __MODFUNC__'
+
+    ans = ( sum( a .dot. a ) == 0.0_DR )
+
+  end function vecfield__is_zero__?
+
+end module vecfield_m
