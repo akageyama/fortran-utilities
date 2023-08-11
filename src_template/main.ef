@@ -11,6 +11,7 @@ program main
   logical :: just_once = .true.
 
   print *,'*** Exec starts on ' // ut__date_and_time()
+  print *,'This is __MODLINE__'
 
                                       !{main  }{{STT}}
   call iChecks
