@@ -1,0 +1,41 @@
+module const_phys_m
+  use const_base_m
+  use ut_m
+  implicit none
+  private
+  public :: const_phys__check
+
+  !<< Physical constants >>!
+  real(DR) <const> :: magnetic_permeability_ = 4*PI*1.0e-7_DR    ! m kg/s^2/A^2
+  real(DR) <const> :: proton_mass_           = 1.67262178e-27_DR ! kg
+  real(DR) <const> :: electron_mass_         = 9.10938291e-31_DR ! kg
+  real(DR) <const> :: plasma_mean_mass_  &
+                        = ( proton_mass_ + electron_mass_ ) / 2
+  real(DR) <const> :: boltzmann_constant_    = 1.3806488e-23_DR  ! J/K
+
+
+  type :: const_phys_t
+    real(DR) :: plasma_mean_mass
+    real(DR) :: boltzmann_constant
+    real(DR) :: magnetic_permeability
+  end type const_phys_t
+
+  type(const_phys_t), public <const> ::  &
+    CONST_PHYS = const_phys_t( plasma_mean_mass_,  &
+                               boltzmann_constant_,  &
+                               magnetic_permeability_ )
+
+
+contains
+
+
+  subroutine const_phys__check
+    call ut__message_leader( "__MODULE__: plasma_mean_mass",  &
+                               CONST_PHYS.plasma_mean_mass )
+    call ut__message_leader( "__MODULE__: boltzmann_constant",  &
+                               CONST_PHYS.boltzmann_constant )
+    call ut__message_leader( "__MODULE__: magnetic_permeability",  &
+                               CONST_PHYS.magnetic_permeability )
+  end subroutine const_phys__check
+
+end module const_phys_m

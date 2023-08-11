@@ -1,0 +1,86 @@
+module const_sim_m
+  use const_base_m
+  use ut_m
+  implicit none
+  private
+  public :: const_sim__check
+
+  public :: NPROC_X, NPROC_Y, NPROC_Z
+  public :: NXPP, NYPP, NZPP, NXPP1, NYPP1, NZPP1
+  public :: NX_GLOBAL, NY_GLOBAL, NZ_GLOBAL
+
+  !<< MPI process constants >>!
+  integer <const> :: NPROC_X = 2  ! Raw number; mkjob.sh will grep this.
+  integer <const> :: NPROC_Y = 1  ! Raw number; mkjob.sh will grep this.
+  integer <const> :: NPROC_Z = 1  ! Raw number; mkjob.sh will grep this.
+
+  !<< Grid size constants >>!
+  integer <const> :: NXPP = 20 ! grids per process
+  integer <const> :: NYPP = 40
+  integer <const> :: NZPP = 40
+
+  integer <const> :: NXPP1 = NXPP + 1
+  integer <const> :: NYPP1 = NYPP + 1
+  integer <const> :: NZPP1 = NZPP + 1
+
+  integer <const> :: NX_GLOBAL = NXPP * NPROC_X + 2
+  integer <const> :: NY_GLOBAL = NYPP * NPROC_Y + 2
+  integer <const> :: NZ_GLOBAL = NZPP * NPROC_Z + 2
+
+  !<< I/O >>!
+  type, public :: file_num_t
+    integer :: namelist
+    integer :: standard_out
+    integer :: quick_save
+    integer :: old_restart
+    integer :: new_restart
+    integer :: vis2d
+    integer :: slice_2d_xy
+    integer :: slice_2d_yz
+    integer :: slice_2d_zx
+    integer :: slice_2d_xy2
+    integer :: slice_2d_xy3
+    integer :: integrated_values
+    integer :: viz_to_disk
+    integer :: avs_data
+  end type file_num_t
+
+  type (file_num_t) <const> :: &
+     FILE_NUM =                   &
+        file_num_t (              &
+                     05,          & ! namelist
+                     06,          & ! standard_out
+                     07,          & ! quick_save
+                     10,          & ! old_restart
+                     11,          & ! new_restart
+                     20,          & ! vis2d
+                     21,          & ! slice_2d_xy
+                     22,          & ! slice_2d_yz
+                     23,          & ! slice_2d_zx
+                     24,          & ! slice_2d_xy2
+                     25,          & ! slice_2d_xy3
+                     30,          & ! integrated_values
+                     31,          & ! viz_to_disk
+                     40           & ! avs_data
+                   )
+
+
+contains
+
+
+  subroutine const_sim__check
+    call ut__message_leader( '__MODULE__: NPROC_X', NPROC_X )
+    call ut__message_leader( '__MODULE__: NPROC_Y', NPROC_Y )
+    call ut__message_leader( '__MODULE__: NPROC_Z', NPROC_Z )
+    call ut__message_leader( '__MODULE__: NXPP', NXPP )
+    call ut__message_leader( '__MODULE__: NYPP', NYPP )
+    call ut__message_leader( '__MODULE__: NZPP', NZPP )
+    call ut__message_leader( '__MODULE__: NXPP1', NXPP1 )
+    call ut__message_leader( '__MODULE__: NYPP1', NYPP1 )
+    call ut__message_leader( '__MODULE__: NZPP1', NZPP1 )
+    call ut__message_leader( '__MODULE__: NX_GLOBAL', NX_GLOBAL )
+    call ut__message_leader( '__MODULE__: NY_GLOBAL', NY_GLOBAL )
+    call ut__message_leader( '__MODULE__: NZ_GLOBAL', NZ_GLOBAL )
+  end subroutine const_sim__check
+
+end module const_sim_m

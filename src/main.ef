@@ -1,0 +1,43 @@
+program main
+  use const_base_m
+  use const_phys_m
+  use const_sim_m
+  use mpiut_m
+  use parallel_m
+  use ut_m
+  implicit none
+
+  integer :: cnt = 0
+  logical :: just_once = .true.
+
+  print *,'*** Exec starts on ' // ut__date_and_time()
+
+                                      !{main  }{{STT}}
+  call iChecks
+  call Parallel.initialize            !{main  }{para i}
+
+  do while( ... )                     !{{count}}
+    ==<just_once>==
+      call ...                        !{main  }{......}
+    ==</just_once>==
+
+    ==<skip cnt:100>==
+      call mpiut__message_leader( Parallel.comm,   &
+                                  "loop", ... )
+    ==</skip cnt>==
+    call ...                          !{main  }{......}
+  end do
+
+  call ut__deco_message( '#', "..." ) !{main  }{{END}}
+                                      !{{print}}
+  call Parallel.finalize
+
+contains
+
+  subroutine iChecks
+    call const_base__check
+    call const_sim__check
+    call const_phys__check
+  end subroutine iChecks
+
+end program main
