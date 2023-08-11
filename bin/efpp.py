@@ -283,8 +283,8 @@ def alias_decode(lines_in):
 
     # Default macros
     alias_dict = {
-            "_?_"
-          : "_BOOLEAN"
+            "__?"
+          : "_Bool"
           ,
             " char(len="
           : " character(len="
