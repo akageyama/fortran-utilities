@@ -51,16 +51,17 @@
     2017.08.04: Added ut__sleep.  -kage
 
   ut.ef
-    2022.07.17: This was ut.e03.  -kage
+    2022.07.17: This was ut.e03.
     2022.07.17: Remove ut__plusplus.
     2022.07.17: write(FILE_NUM.standard_out,*)  --> print *
     2022.07.18: Add ut__sizeof.
     2022.07.18: Add message_str_si_si_si_si_si.
-    2022.07.10: Add ut__date_and_time.  -kage
+    2022.07.10: Add ut__date_and_time.
     2022.08.15: Change period to underscore for the leader.
     2023.04.14: Add message_leader_logical.
     2023.05.05: Add ut__real_to_str13
     2023.08.11: Copied from tetrahedral-dynamo.
+    2023.08.24: Add message_str_sr.
 
 !!<
 
@@ -103,6 +104,7 @@ module ut_m
   interface ut__message
      module procedure message_str,                &
                       message_str_dr,             &
+                      message_str_sr,             &
                       message_str_dr_str,         &
                       message_str_si,             &
                       message_str_di,             &
@@ -654,6 +656,14 @@ contains
 
     print *,  string, double
   end subroutine message_str_dr
+
+
+  subroutine message_str_sr( string, single )
+    char(len=*) <in> :: string
+    real(SR)    <in> :: single
+
+    print *,  string, single
+  end subroutine message_str_sr
 
 
   subroutine message_str_dr_str( str01, double, str02 )

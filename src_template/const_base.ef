@@ -2,7 +2,7 @@ module const_base_m
   use iso_fortran_env
   implicit none
   private
-  public :: SI, DI, SR, DR, NIL, NAN, PI, TWOPI
+  public :: SI, DI, SR, DR, NIL, NAN, PI, TWOPI, DEBUG_MODE
   public :: const_base__check
 
   !<< Fortran constants >>!
@@ -17,16 +17,20 @@ module const_base_m
   real(DR) <const> :: PI = atan(1.0_DR)*4
   real(DR) <const> :: TWOPI = PI*2
 
+  !<< Code development constants >>!
+  logical <const> :: DEBUG_MODE = .true.
+
 
 contains
 
 
-  subroutine print_DR_or_SI( string, val_real, val_int )
+  subroutine print_DR_or_SI_or_bool( string, val_real, val_int, val_bool )
     char(len=*) <in> :: string
-    real(DR) <optin> :: val_real
-    integer(SI) <optin> :: val_int
+    real(DR)    <optin> :: val_real  ! Only one of these three
+    integer(SI) <optin> :: val_int   !  options must be passed.
+    logical     <optin> :: val_bool  ! This is not checked for.
 
-    integer(SI) <const> :: LENGTH = 60
+    integer(SI) <const> :: LENGTH = 60 
     char(len=22) :: string_for_val
     char(len=LENGTH) :: line
     integer(SI) :: len_str_for_val
@@ -38,24 +42,40 @@ contains
       write(string_for_val,'(1pe22.15)') val_real
     else if ( present(val_int) ) then
       write(string_for_val,'(a1,i0)') ' ', val_int ! put a space in front of i
+    else if ( present(val_bool) ) then
+      if ( val_bool ) then
+        write(string_for_val,'(a1,a6)') ' ', '.true.'  ! put a space at the head.
+      else
+        write(string_for_val,'(a1,a7)') ' ', '.false.' ! put a space at the head.
+      end if
     end if
 
     len_str_for_val = len_trim(string_for_val)
     line(LENGTH-len_str_for_val:LENGTH) = trim(string_for_val)
 
     print *, line
-  end subroutine print_DR_or_SI
+  end subroutine print_DR_or_SI_or_bool
 
 
   subroutine const_base__check
-    call print_DR_or_SI( '__MODULE__: SI', val_int=SI )
-    call print_DR_or_SI( '__MODULE__: DI', val_int=DI )
-    call print_DR_or_SI( '__MODULE__: SR', val_int=SR )
-    call print_DR_or_SI( '__MODULE__: DR', val_int=DR )
-    call print_DR_or_SI( '__MODULE__: PI', val_real=PI )
-    call print_DR_or_SI( '__MODULE__: TWOPI', val_real=TWOPI )
-    call print_DR_or_SI( '__MODULE__: NIL', val_int=NIL )
-    call print_DR_or_SI( '__MODULE__: NAN', val_real=NAN )
+    call print_DR_or_SI_or_bool( '__MODULE__: SI',  &
+                                      val_int=SI )
+    call print_DR_or_SI_or_bool( '__MODULE__: DI',  &
+                                      val_int=DI )
+    call print_DR_or_SI_or_bool( '__MODULE__: SR',  &
+                                      val_int=SR )
+    call print_DR_or_SI_or_bool( '__MODULE__: DR',  &
+                                      val_int=DR )
+    call print_DR_or_SI_or_bool( '__MODULE__: NIL',  &
+                                      val_int=NIL )
+    call print_DR_or_SI_or_bool( '__MODULE__: NAN',  &
+                                     val_real=NAN )
+    call print_DR_or_SI_or_bool( '__MODULE__: PI',  &
+                                     val_real=PI )
+    call print_DR_or_SI_or_bool( '__MODULE__: TWOPI',  &
+                                     val_real=TWOPI )
+    call print_DR_or_SI_or_bool( '__MODULE__: DEBUG_MODE',  &
+                                     val_bool=DEBUG_MODE )
   end subroutine const_base__check   
 
 end module const_base_m

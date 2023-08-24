@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#
+# Usage grep_process_num_from_src.sh src.ef
 # 
 # COLUM:  01       02   03   04   05 06 07 08 ...
 #  LINE: integer <const> :: NPROC_X = 1  ! Comment line
@@ -20,7 +21,7 @@ function grep_nproc_z()
   cat $1 | grep '^ *integer <const> :: NPROC_Z'  | awk '{print $6}'
 }
 
-src_file=../src/const_sim.ef
+src_file=$1
 
 nproc_x=`grep_nproc_x $src_file`
 nproc_y=`grep_nproc_y $src_file`
