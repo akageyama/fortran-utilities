@@ -62,6 +62,7 @@
     2023.05.05: Add ut__real_to_str13
     2023.08.11: Copied from tetrahedral-dynamo.
     2023.08.24: Add message_str_sr.
+    2023.08.24: Add ut__latlon_self2othr
 
 !!<
 
@@ -87,6 +88,7 @@ module ut_m
             ut__int_to_str6,              &
             ut__int_to_str8,              &
             ut__int_to_str10,             &
+            ut__latlon_self2othr,         &
             ut__legendren,                &
             ut__make_queue,               &
             ut__message,                  &
@@ -1358,6 +1360,29 @@ contains
        write(ut__i2c7,'(i7.7)') i
     end if
   end function ut__i2c7
+
+
+  subroutine ut__latlon_self2othr( tht_self, phi_self, tht_othr, phi_othr )
+    real(DR) <in>  :: tht_self, phi_self
+    real(DR) <out> :: tht_othr, phi_othr
+
+    !!>
+        Coordinates transformation of lat-lon coordinates
+        from Yin to Yang or Yang to Yin.
+    !!<
+  
+    real(DR) :: x_self, y_self, z_self
+    real(DR) :: x_othr, y_othr, z_othr
+  
+    x_self = sin(tht_self)*cos(phi_self)
+    y_self = sin(tht_self)*sin(phi_self)
+    z_self = cos(tht_self)
+    x_othr = -x_self
+    y_othr =  z_self
+    z_othr =  y_self
+    tht_othr = acos(z_othr)
+    phi_othr = ut__atan(y_othr,x_othr)
+  end subroutine ut__latlon_self2othr
 
 
   subroutine ut__legendren( l, m, x, y )
